@@ -322,31 +322,13 @@ input:focus, select:focus, textarea:focus {
 .pdf-export input,
 .pdf-export select,
 .pdf-export textarea {
-  border: none !important;
-  background: transparent !important;
-  padding: 0 !important;
+  border: none;
+  background: transparent;
+  padding: 0;
   appearance: none;
 }
 
 /* Previne quebras de página no meio de elementos no PDF */
 .form-section, .photo-card, .signature-container {
   page-break-inside: avoid;
-}
-
-/* MODO PDF: Força a tela a virar um A4 perfeito na hora de salvar, evitando cortes no celular ou esmagamento no PC */
-body.pdf-mode {
-  width: 800px !important;
-  min-width: 800px !important;
-  margin: 0 auto !important;
-  padding: 0 !important;
-  background: #ffffff !important;
-}
-
-body.pdf-mode .container {
-  width: 800px !important;
-  max-width: 800px !important;
-  margin: 0 !important;
-  padding: 20px !important;
-  box-shadow: none !important;
-  border: none !important;
 }

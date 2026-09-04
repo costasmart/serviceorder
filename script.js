@@ -109,93 +109,24 @@ function renderPhotosGrid() {
   tempPhotos.forEach(img => addPhotoToGrid(img));
 }
 
-// CORREÇÃO CORTE LATERAL PDF PC E TRANSBORDO PDF MOBILE
-// async function handleSaveOS() {
-//   const modal = document.getElementById("loading-modal");
-//   const loadingText = document.getElementById("loading-text");
-//   modal.style.display = "flex";
-
-//   const element = document.getElementById("os-container");
-//   const originalWidth = element.style.width;
-//   const originalMaxWidth = element.style.maxWidth;
-
-//   try {
-//     const rawName = document.getElementById("cliente-nome").value.trim();
-//     const formattedName = rawName ? rawName.toUpperCase().replace(/[^A-Z0-9]/g, "_") : "CLIENTE";
-//     const filename = `${formattedName}_${osNumber}.pdf`;
-
-//     document.getElementById("action-buttons").style.display = "none";
-//     document.getElementById("btn-add-photo").style.display = "none";
-//     document.getElementById("btn-clear-signature").style.display = "none";
-//     document.querySelectorAll(".btn-remove-photo").forEach(btn => btn.style.display = "none");
-
-//     window.scrollTo(0, 0);
-
-//     // TRUQUE: Força o formulário a ter 800px temporariamente para o PDF não cortar
-//     element.style.width = '800px';
-//     element.style.maxWidth = '800px';
-
-//     const opt = {
-//       margin: 5,
-//       filename: filename,
-//       image: { type: 'jpeg', quality: 0.98 },
-//       pagebreak: { mode: ['css', 'legacy'] },
-//       html2canvas: { 
-//         scale: 2, 
-//         useCORS: true,
-//         scrollY: 0,
-//         scrollX: 0,
-//         windowWidth: 820 // Câmera virtual captura os 800px inteiros
-//       },
-//       jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
-//     };
-
-//     const pdfWorker = html2pdf().set(opt).from(element);
-    
-//     await pdfWorker.save();
-
-//     const pdfBase64 = await pdfWorker.outputPdf('datauristring');
-//     const base64Data = pdfBase64.split(',')[1];
-
-//     if (GOOGLE_SCRIPT_URL) {
-//       loadingText.innerText = "Salvando cópia no Google Drive...";
-      
-//       await fetch(GOOGLE_SCRIPT_URL, {
-//         method: "POST",
-//         mode: "no-cors",
-//         headers: {
-//           "Content-Type": "text/plain;charset=utf-8", 
-//         },
-//         body: JSON.stringify({
-//           filename: filename,
-//           mimeType: "application/pdf",
-//           base64: base64Data
-//         })
-//       });
-//     }
-
-//     alert("Ordem de Serviço gerada e salva no Drive com sucesso!");
-
-//   } catch (error) {
-//     console.error("Erro ao gerar OS:", error);
-//     alert("Ocorreu um erro ao gerar a O.S. Verifique sua conexão e tente novamente.");
-//   } finally {
-//     // Restaura o tamanho normal para não quebrar a tela do celular
-//     element.style.width = originalWidth;
-//     element.style.maxWidth = originalMaxWidth;
-
-//     document.getElementById("action-buttons").style.display = "block";
-//     document.getElementById("btn-add-photo").style.display = "flex";
-//     document.getElementById("btn-clear-signature").style.display = "inline-block";
-//     document.querySelectorAll(".btn-remove-photo").forEach(btn => btn.style.display = "block");
-//     modal.style.display = "none";
-//   }
-// }
-
 async function handleSaveOS() {
   const modal = document.getElementById("loading-modal");
   const loadingText = document.getElementById("loading-text");
   modal.style.display = "flex";
+
+  const element = document.getElementById("os-container");
+
+  // Salva o estado original dos estilos que vamos manipular
+  const originalStyles = {
+    width: element.style.width,
+    maxWidth: element.style.maxWidth,
+    minWidth: element.style.minWidth,
+    margin: element.style.margin,
+    position: element.style.position,
+    top: element.style.top,
+    left: element.style.left,
+    transform: element.style.transform
+  };
 
   try {
     const rawName = document.getElementById("cliente-nome").value.trim();
@@ -210,10 +141,15 @@ async function handleSaveOS() {
 
     window.scrollTo(0, 0);
 
-    // TRUQUE MESTRE: Aplica a classe que transforma a tela num A4 perfeito
-    document.body.classList.add("pdf-mode");
-
-    const element = document.getElementById("os-container");
+    // TRUQUE DEFINITIVO: Aplica os estilos via JS para isolar o form (Alta Especificidade)
+    element.style.width = '780px';
+    element.style.minWidth = '780px';
+    element.style.maxWidth = '780px';
+    element.style.margin = '0';
+    element.style.position = 'absolute';
+    element.style.top = '0';
+    element.style.left = '0';
+    element.style.transform = 'none';
 
     const opt = {
       margin: 5,
@@ -224,18 +160,15 @@ async function handleSaveOS() {
         scale: 2, 
         useCORS: true,
         scrollY: 0,
-        scrollX: 0,
-        windowWidth: 800 // Trava a câmera virtual em exatos 800px
+        scrollX: 0
       },
       jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
     };
 
     const pdfWorker = html2pdf().set(opt).from(element);
     
-    // Baixa o PDF no dispositivo
     await pdfWorker.save();
 
-    // Extrai o código base64 para enviar ao Drive
     const pdfBase64 = await pdfWorker.outputPdf('datauristring');
     const base64Data = pdfBase64.split(',')[1];
 
@@ -262,8 +195,8 @@ async function handleSaveOS() {
     console.error("Erro ao gerar OS:", error);
     alert("Ocorreu um erro ao gerar a O.S. Verifique sua conexão e tente novamente.");
   } finally {
-    // RESTAURA a tela para o tamanho normal apagando a classe do A4
-    document.body.classList.remove("pdf-mode");
+    // Restaura o layout normal devolvendo os estilos originais
+    Object.assign(element.style, originalStyles);
 
     // Restaura os botões
     document.getElementById("action-buttons").style.display = "block";
