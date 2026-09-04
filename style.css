@@ -33,13 +33,14 @@ body {
 }
 
 .header-title h1 {
-  font-size: 22px;
+  font-size: 20px;
   color: #1e3a8a;
 }
 
 .header-title p {
-  font-size: 13px;
-  color: #666;
+  font-size: 12px;
+  color: #555;
+  line-height: 1.4;
 }
 
 .header-info {
@@ -62,7 +63,7 @@ body {
 }
 
 .info-box span {
-  font-size: 14px;
+  font-size: 13px;
   font-weight: bold;
   color: #0f172a;
 }
@@ -77,7 +78,7 @@ body {
 }
 
 .form-section h2 {
-  font-size: 16px;
+  font-size: 15px;
   color: #1e3a8a;
   border-bottom: 1px solid #cbd5e1;
   padding-bottom: 8px;
@@ -97,7 +98,7 @@ body {
 }
 
 .col-2 { grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); }
-.col-3 { grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); }
+.col-3 { grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); }
 
 .span-2 { grid-column: span 1; }
 @media (min-width: 600px) {
@@ -109,11 +110,28 @@ body {
   flex-direction: column;
 }
 
-.form-group label {
+.form-group label, .checklist-item label {
   font-size: 13px;
   font-weight: 600;
   margin-bottom: 4px;
   color: #334155;
+}
+
+.checklist-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #f8fafc;
+  padding: 8px 12px;
+  border-radius: 6px;
+  margin-bottom: 8px;
+  border: 1px solid #e2e8f0;
+  gap: 10px;
+}
+
+.checklist-item select {
+  width: 100px;
+  padding: 6px;
 }
 
 input[type="text"],
@@ -122,37 +140,16 @@ input[type="tel"],
 select,
 textarea {
   width: 100%;
-  padding: 10px;
+  padding: 9px;
   border: 1px solid #cbd5e1;
   border-radius: 6px;
   font-size: 14px;
   outline: none;
-  transition: border-color 0.2s;
+  background: #fff;
 }
 
 input:focus, select:focus, textarea:focus {
   border-color: #2563eb;
-}
-
-/* Checkboxes */
-.checkbox-group, .checkbox-grid {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 12px;
-  margin-top: 5px;
-}
-
-.checkbox-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-}
-
-.checkbox-group label, .checkbox-grid label {
-  font-size: 13px;
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  cursor: pointer;
 }
 
 /* Fotos */
@@ -232,7 +229,7 @@ input:focus, select:focus, textarea:focus {
 #signature-canvas {
   width: 100%;
   max-width: 600px;
-  height: 180px;
+  height: 160px;
   border: 2px dashed #cbd5e1;
   border-radius: 8px;
   background-color: #fafafa;
@@ -265,7 +262,6 @@ input:focus, select:focus, textarea:focus {
   width: 100%;
   max-width: 400px;
   box-shadow: 0 4px 10px rgba(22, 163, 74, 0.3);
-  transition: background 0.2s;
 }
 
 .btn-primary:hover {
@@ -282,11 +278,7 @@ input:focus, select:focus, textarea:focus {
   cursor: pointer;
 }
 
-.btn-secondary:hover {
-  background-color: #475569;
-}
-
-/* Modal de Envio */
+/* Modal */
 .modal {
   position: fixed;
   top: 0; left: 0; width: 100%; height: 100%;
@@ -318,17 +310,13 @@ input:focus, select:focus, textarea:focus {
   100% { transform: rotate(360deg); }
 }
 
-/* Estilos de Impressão e PDF */
-.pdf-export input,
-.pdf-export select,
-.pdf-export textarea {
+.pdf-export input, .pdf-export select, .pdf-export textarea {
   border: none;
   background: transparent;
   padding: 0;
   appearance: none;
 }
 
-/* Previne quebras de página no meio de elementos no PDF */
 .form-section, .photo-card, .signature-container {
   page-break-inside: avoid;
 }

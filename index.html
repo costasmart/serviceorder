@@ -3,9 +3,10 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Ordem de Serviço - Costa Smart</title>
+  <title>Ordem de Serviço - Costa Representante Técnico</title>
   <link rel="stylesheet" href="style.css">
   
+  <!-- Bibliotecas CDN -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/signature_pad@4.1.7/dist/signature_pad.umd.min.js"></script>
 </head>
@@ -13,10 +14,13 @@
 
   <div class="container" id="os-container">
     
+    <!-- Cabeçalho Fixo da Empresa Prestadora -->
     <header class="os-header">
       <div class="header-title">
         <h1>ORDEM DE SERVIÇO</h1>
-        <p>Costa Smart Rastreamentos - Rastreamento inteligente, e o controle nas suas mãos!</p>
+        <p><strong>Costa Representante Técnico</strong></p>
+        <p>CNPJ: 59.796.727/0001-70 | E-mail: costa_smart25@hotmail.com</p>
+        <p>Rua Ali Hussein Daychoun, Vila Sônia, Praia Grande - SP</p>
       </div>
       <div class="header-info">
         <div class="info-box">
@@ -32,107 +36,113 @@
 
     <form id="os-form">
       
+      <!-- Dados do Cliente -->
       <section class="form-section">
-        <h2>1. Dados do Cliente</h2>
+        <h2>1. Informações do Cliente</h2>
         <div class="form-grid col-2">
           <div class="form-group span-2">
-            <label for="cliente-nome">Nome Completo / Razão Social:</label>
-            <input type="text" id="cliente-nome" placeholder="Digite o nome do cliente">
-          </div>
-          <div class="form-group">
-            <label for="cliente-nasc">Data de Nascimento / Fundação:</label>
-            <input type="date" id="cliente-nasc">
+            <label for="cliente-nome">Nome Completo / Razão Social do Cliente:</label>
+            <input type="text" id="cliente-nome" placeholder="Ex: SEGMOB DO BRASIL ou Nome do Cliente">
           </div>
           <div class="form-group">
             <label for="cliente-doc">CPF ou CNPJ:</label>
-            <input type="text" id="cliente-doc" placeholder="000.000.000-00">
-          </div>
-          <div class="form-group span-2">
-            <label for="cliente-end">Endereço Completo:</label>
-            <input type="text" id="cliente-end" placeholder="Rua, Número, Bairro, Cidade - UF">
+            <input type="text" id="cliente-doc" placeholder="00.000.000/0001-00">
           </div>
           <div class="form-group">
-            <label for="cliente-tel">Telefone / WhatsApp:</label>
+            <label for="cliente-tel">Telefone / Contato:</label>
             <input type="tel" id="cliente-tel" placeholder="(00) 00000-0000">
+          </div>
+          <div class="form-group span-2">
+            <label for="cliente-end">Endereço do Atendimento:</label>
+            <input type="text" id="cliente-end" placeholder="Rua, Número, Bairro, Cidade - UF">
           </div>
         </div>
       </section>
 
+      <!-- Dados do Veículo e Serviço -->
       <section class="form-section">
         <h2>2. Detalhes do Serviço & Veículo</h2>
-        
-        <div class="form-group">
-          <label>Tipo de Serviço:</label>
-          <div class="checkbox-group">
-            <label><input type="checkbox" name="tipo_servico" value="Instalação"> Instalação</label>
-            <label><input type="checkbox" name="tipo_servico" value="Manutenção"> Manutenção</label>
-            <label><input type="checkbox" name="tipo_servico" value="Desinstalação"> Desinstalação</label>
-            <label><input type="checkbox" name="tipo_servico" value="Troca de Chip"> Troca de Chip</label>
-            <label><input type="checkbox" name="tipo_servico" value="Vistoria"> Vistoria Técnica</label>
-          </div>
-        </div>
-
         <div class="form-grid col-3">
           <div class="form-group">
-            <label for="tipo-operacao">Tipo de Operação / Veículo:</label>
-            <select id="tipo-operacao">
-              <option value="">Selecione...</option>
-              <option value="Carro / Passeio">Carro / Passeio</option>
-              <option value="Moto / Motocicleta">Moto / Motocicleta</option>
-              <option value="Caminhão / Reboque">Caminhão / Reboque</option>
-              <option value="Máquina / Agrícola">Máquina / Agrícola</option>
-              <option value="Embarcação">Embarcação</option>
-              <option value="Outro">Outro</option>
+            <label for="tipo-tarefa">Tipo de Tarefa:</label>
+            <select id="tipo-tarefa">
+              <option value="INSTALAÇÃO">INSTALAÇÃO</option>
+              <option value="MANUTENÇÃO">MANUTENÇÃO</option>
+              <option value="RETIRADA">RETIRADA</option>
             </select>
           </div>
           <div class="form-group">
             <label for="veiculo-placa">Placa do Veículo:</label>
-            <input type="text" id="veiculo-placa" placeholder="ABC-1234 ou ABC1D23">
+            <input type="text" id="veiculo-placa" placeholder="Ex: QNM-9D41">
           </div>
           <div class="form-group">
-            <label for="veiculo-modelo">Modelo / Ano / Cor:</label>
-            <input type="text" id="veiculo-modelo" placeholder="Ex: Gol 1.0 2020 Preto">
+            <label for="veiculo-modelo">Modelo / Montadora:</label>
+            <input type="text" id="veiculo-modelo" placeholder="Ex: GM Spin / Chevrolet">
           </div>
         </div>
 
-        <div class="form-grid col-2">
+        <div class="form-grid col-2" style="margin-top: 12px;">
           <div class="form-group">
-            <label for="equip-modelo">Modelo do Rastreador:</label>
-            <input type="text" id="equip-modelo" placeholder="Ex: Suntech, Concox, Queclink">
+            <label for="equipamento-usado">Equipamento / Material:</label>
+            <input type="text" id="equipamento-usado" placeholder="Ex: RASTREADOR 4G + TAG">
           </div>
           <div class="form-group">
-            <label for="equip-imei">IMEI / Número de Série:</label>
-            <input type="text" id="equip-imei" placeholder="Digite o IMEI do equipamento">
+            <label for="tecnico-nome">Técnico Responsável:</label>
+            <input type="text" id="tecnico-nome" value="Guilherme">
           </div>
           <div class="form-group span-2">
-            <label for="local-instalacao">Local de Instalação do Equipamento:</label>
-            <input type="text" id="local-instalacao" placeholder="Ex: Painel principal, Coluna lateral, Farol...">
+            <label for="relato-execucao">Relato de Execução / Local de Instalação:</label>
+            <input type="text" id="relato-execucao" placeholder="Ex: Painel dianteiro esquerdo, tag dianteiro direito...">
           </div>
         </div>
       </section>
 
+      <!-- Checklist Técnico -->
       <section class="form-section">
-        <h2>3. Checklist de Testes Técnicos</h2>
-        <div class="checkbox-grid">
-          <label><input type="checkbox" name="checklist" value="GPS OK"> Sinal GPS Confirmado</label>
-          <label><input type="checkbox" name="checklist" value="GPRS OK"> Comunicação GPRS OK</label>
-          <label><input type="checkbox" name="checklist" value="Bloqueio OK"> Teste de Bloqueio OK</label>
-          <label><input type="checkbox" name="checklist" value="Sirene OK"> Sirene / Alarme OK</label>
-          <label><input type="checkbox" name="checklist" value="Pós-Chave OK"> Pós-Chave (Pós-Ignição) OK</label>
-          <label><input type="checkbox" name="checklist" value="Bateria OK"> Tensão Bateria Normal</label>
+        <h2>3. Checklist do Serviço</h2>
+        
+        <div class="checklist-item">
+          <label>Avarias externas? (Arranhados, amassados, quebrados etc.):</label>
+          <select id="avaria-externa">
+            <option value="Não">Não</option>
+            <option value="Sim">Sim</option>
+          </select>
+        </div>
+
+        <div class="checklist-item">
+          <label>Avarias no interior? (Quebrado, arranhado):</label>
+          <select id="avaria-interno">
+            <option value="Não">Não</option>
+            <option value="Sim">Sim</option>
+          </select>
+        </div>
+
+        <div class="checklist-item">
+          <label>Possui alguma luz de avaria acesa no painel?:</label>
+          <select id="luz-painel">
+            <option value="Não">Não</option>
+            <option value="Sim">Sim</option>
+          </select>
+        </div>
+
+        <div class="checklist-item">
+          <label>Dificuldade ao dar partida no motor?:</label>
+          <select id="dificuldade-partida">
+            <option value="Não">Não</option>
+            <option value="Sim">Sim</option>
+          </select>
+        </div>
+
+        <div class="form-group" style="margin-top: 15px;">
+          <label for="observacoes-gerais">Observações / Diagnóstico:</label>
+          <textarea id="observacoes-gerais" rows="3" placeholder="Insira detalhes adicionais se houver..."></textarea>
         </div>
       </section>
 
+      <!-- Registro Fotográfico -->
       <section class="form-section">
-        <h2>4. Observações / Diagnóstico do Técnico</h2>
-        <div class="form-group">
-          <textarea id="os-observacoes" rows="3" placeholder="Digite aqui observações adicionais, peças trocadas ou avarias pré-existentes no veículo..."></textarea>
-        </div>
-      </section>
-
-      <section class="form-section">
-        <h2>5. Registro Fotográfico</h2>
-        <p class="section-desc">Clique no botão "+" para capturar com a câmera do celular ou anexar fotos da galeria.</p>
+        <h2>4. Registro Fotográfico</h2>
+        <p class="section-desc">Adicione fotos do veículo, painel, avarias ou do rastreador instalado (clique no "+").</p>
         
         <div class="photos-wrapper">
           <div id="photos-grid" class="photos-grid"></div>
@@ -140,15 +150,13 @@
             <span>+</span>
           </button>
         </div>
-        <!-- ALTERADO POIS ABRIA A CAMERA DIRETO SEM OPÇÃO DE UPAR DO DISCO LOCAL
-        <input type="file" id="photo-file-input" accept="image/*" capture="environment" style="display: none;">
-        -->
         <input type="file" id="photo-file-input" accept="image/*" style="display: none;">
       </section>
 
+      <!-- Assinatura Digital -->
       <section class="form-section">
-        <h2>6. Assinatura do Cliente</h2>
-        <p class="section-desc">Assine abaixo com o dedo na tela (ou com o mouse no computador).</p>
+        <h2>5. Assinatura do Cliente</h2>
+        <p class="section-desc">Opcional: Assine com o dedo na tela ou mouse.</p>
         
         <div class="signature-container">
           <canvas id="signature-canvas"></canvas>
@@ -158,15 +166,17 @@
         </div>
       </section>
 
+      <!-- Botões de Ação -->
       <div class="form-actions" id="action-buttons">
         <button type="button" id="btn-submit" class="btn-primary">
-          <span>💾</span> Concluir e Salvar O.S. (PDF)
+          <span>💾</span> Concluir e Salvar O.S. (PDF e Drive)
         </button>
       </div>
 
     </form>
   </div>
 
+  <!-- Modal de Envio -->
   <div id="loading-modal" class="modal" style="display: none;">
     <div class="modal-content">
       <div class="spinner"></div>
