@@ -327,3 +327,8 @@ input:focus, select:focus, textarea:focus {
   padding: 0 !important;
   appearance: none;
 }
+
+/* Previne quebras de página no meio de elementos no PDF */
+.form-section, .photo-card, .signature-container {
+  page-break-inside: avoid;
+}
