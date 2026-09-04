@@ -116,17 +116,10 @@ function renderPhotosGrid() {
 
 //   const element = document.getElementById("os-container");
 
-//   // Salva o estado original dos estilos que vamos manipular
-//   const originalStyles = {
-//     width: element.style.width,
-//     maxWidth: element.style.maxWidth,
-//     minWidth: element.style.minWidth,
-//     margin: element.style.margin,
-//     position: element.style.position,
-//     top: element.style.top,
-//     left: element.style.left,
-//     transform: element.style.transform
-//   };
+//   // Salva os estilos originais para podermos restaurar depois
+//   const originalWidth = element.style.width;
+//   const originalMaxWidth = element.style.maxWidth;
+//   const originalMargin = element.style.margin;
 
 //   try {
 //     const rawName = document.getElementById("cliente-nome").value.trim();
@@ -141,15 +134,13 @@ function renderPhotosGrid() {
 
 //     window.scrollTo(0, 0);
 
-//     // TRUQUE DEFINITIVO: Aplica os estilos via JS para isolar o form (Alta Especificidade)
-//     element.style.width = '780px';
-//     element.style.minWidth = '780px';
-//     element.style.maxWidth = '780px';
+//     // PREPARAÇÃO EXATA PARA O PDF:
+//     // 1. Largura de 790px (Proporção perfeita para folha A4)
+//     // 2. maxWidth: 'none' (Impede o celular de encolher ou cortar)
+//     // 3. margin: '0' (Empurra pro canto esquerdo, resolvendo o bug do PC esmagado)
+//     element.style.width = '790px';
+//     element.style.maxWidth = 'none';
 //     element.style.margin = '0';
-//     element.style.position = 'absolute';
-//     element.style.top = '0';
-//     element.style.left = '0';
-//     element.style.transform = 'none';
 
 //     const opt = {
 //       margin: 5,
@@ -160,7 +151,11 @@ function renderPhotosGrid() {
 //         scale: 2, 
 //         useCORS: true,
 //         scrollY: 0,
-//         scrollX: 0
+//         scrollX: 0,
+//         x: 0, // Força a captura começar do exato canto superior esquerdo
+//         y: 0,
+//         windowWidth: 790, 
+//         width: 790 // Trava a largura da captura
 //       },
 //       jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
 //     };
@@ -195,8 +190,10 @@ function renderPhotosGrid() {
 //     console.error("Erro ao gerar OS:", error);
 //     alert("Ocorreu um erro ao gerar a O.S. Verifique sua conexão e tente novamente.");
 //   } finally {
-//     // Restaura o layout normal devolvendo os estilos originais
-//     Object.assign(element.style, originalStyles);
+//     // RESTAURA TUDO AO NORMAL PARA O USUÁRIO
+//     element.style.width = originalWidth;
+//     element.style.maxWidth = originalMaxWidth;
+//     element.style.margin = originalMargin;
 
 //     // Restaura os botões
 //     document.getElementById("action-buttons").style.display = "block";
@@ -214,7 +211,7 @@ async function handleSaveOS() {
 
   const element = document.getElementById("os-container");
 
-  // Salva os estilos originais para podermos restaurar depois
+  // Salva os estilos originais para restaurar depois
   const originalWidth = element.style.width;
   const originalMaxWidth = element.style.maxWidth;
   const originalMargin = element.style.margin;
@@ -232,13 +229,14 @@ async function handleSaveOS() {
 
     window.scrollTo(0, 0);
 
-    // PREPARAÇÃO EXATA PARA O PDF:
-    // 1. Largura de 790px (Proporção perfeita para folha A4)
-    // 2. maxWidth: 'none' (Impede o celular de encolher ou cortar)
-    // 3. margin: '0' (Empurra pro canto esquerdo, resolvendo o bug do PC esmagado)
-    element.style.width = '790px';
+    // ADAPTAÇÃO RESPONSIVA INTELIGENTE:
+    // Se for PC (tela larga), usa 790px. Se for celular (tela estreita), usa 100% para caber na tela.
+    const isMobile = window.innerWidth < 800;
+    const targetWidth = isMobile ? '100%' : '790px';
+
+    element.style.width = targetWidth;
     element.style.maxWidth = 'none';
-    element.style.margin = '0';
+    element.style.margin = '0 auto';
 
     const opt = {
       margin: 5,
@@ -250,10 +248,8 @@ async function handleSaveOS() {
         useCORS: true,
         scrollY: 0,
         scrollX: 0,
-        x: 0, // Força a captura começar do exato canto superior esquerdo
-        y: 0,
-        windowWidth: 790, 
-        width: 790 // Trava a largura da captura
+        // Garante que a câmera vai capturar exatamente a largura que o elemento assumiu na tela
+        windowWidth: document.documentElement.clientWidth
       },
       jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
     };
@@ -288,7 +284,7 @@ async function handleSaveOS() {
     console.error("Erro ao gerar OS:", error);
     alert("Ocorreu um erro ao gerar a O.S. Verifique sua conexão e tente novamente.");
   } finally {
-    // RESTAURA TUDO AO NORMAL PARA O USUÁRIO
+    // Restaura tudo ao normal para o usuário
     element.style.width = originalWidth;
     element.style.maxWidth = originalMaxWidth;
     element.style.margin = originalMargin;
