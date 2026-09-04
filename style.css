@@ -48,6 +48,32 @@ body {
   gap: 15px;
 }
 
+/* Estilização da Logo no Cabeçalho */
+.os-header {
+  display: flex;
+  align-items: center; /* Alinha verticalmente a logo e os textos */
+  justify-content: space-between;
+  gap: 15px;
+}
+
+.header-left {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.header-logo {
+  width: 75px;  /* Largura fixa da logo (você pode ajustar se preferir maior ou menor) */
+  height: 75px; /* Altura fixa para manter proporcional */
+  object-fit: contain; /* Garante que a imagem não fique distorcida */
+  border-radius: 6px;
+}
+
+.header-title {
+  flex-grow: 1; /* Faz o texto ocupar o espaço central de forma fluida */
+}
+
 .info-box {
   background: #f8fafc;
   padding: 8px 12px;
