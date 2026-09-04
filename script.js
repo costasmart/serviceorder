@@ -109,6 +109,104 @@ function renderPhotosGrid() {
   tempPhotos.forEach(img => addPhotoToGrid(img));
 }
 
+// async function handleSaveOS() {
+//   const modal = document.getElementById("loading-modal");
+//   const loadingText = document.getElementById("loading-text");
+//   modal.style.display = "flex";
+
+//   const element = document.getElementById("os-container");
+
+//   // Salva o estado original dos estilos que vamos manipular
+//   const originalStyles = {
+//     width: element.style.width,
+//     maxWidth: element.style.maxWidth,
+//     minWidth: element.style.minWidth,
+//     margin: element.style.margin,
+//     position: element.style.position,
+//     top: element.style.top,
+//     left: element.style.left,
+//     transform: element.style.transform
+//   };
+
+//   try {
+//     const rawName = document.getElementById("cliente-nome").value.trim();
+//     const formattedName = rawName ? rawName.toUpperCase().replace(/[^A-Z0-9]/g, "_") : "CLIENTE";
+//     const filename = `${formattedName}_${osNumber}.pdf`;
+
+//     // Oculta os botões
+//     document.getElementById("action-buttons").style.display = "none";
+//     document.getElementById("btn-add-photo").style.display = "none";
+//     document.getElementById("btn-clear-signature").style.display = "none";
+//     document.querySelectorAll(".btn-remove-photo").forEach(btn => btn.style.display = "none");
+
+//     window.scrollTo(0, 0);
+
+//     // TRUQUE DEFINITIVO: Aplica os estilos via JS para isolar o form (Alta Especificidade)
+//     element.style.width = '780px';
+//     element.style.minWidth = '780px';
+//     element.style.maxWidth = '780px';
+//     element.style.margin = '0';
+//     element.style.position = 'absolute';
+//     element.style.top = '0';
+//     element.style.left = '0';
+//     element.style.transform = 'none';
+
+//     const opt = {
+//       margin: 5,
+//       filename: filename,
+//       image: { type: 'jpeg', quality: 0.98 },
+//       pagebreak: { mode: ['css', 'legacy'] },
+//       html2canvas: { 
+//         scale: 2, 
+//         useCORS: true,
+//         scrollY: 0,
+//         scrollX: 0
+//       },
+//       jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+//     };
+
+//     const pdfWorker = html2pdf().set(opt).from(element);
+    
+//     await pdfWorker.save();
+
+//     const pdfBase64 = await pdfWorker.outputPdf('datauristring');
+//     const base64Data = pdfBase64.split(',')[1];
+
+//     if (GOOGLE_SCRIPT_URL) {
+//       loadingText.innerText = "Salvando cópia no Google Drive...";
+      
+//       await fetch(GOOGLE_SCRIPT_URL, {
+//         method: "POST",
+//         mode: "no-cors",
+//         headers: {
+//           "Content-Type": "text/plain;charset=utf-8", 
+//         },
+//         body: JSON.stringify({
+//           filename: filename,
+//           mimeType: "application/pdf",
+//           base64: base64Data
+//         })
+//       });
+//     }
+
+//     alert("Ordem de Serviço gerada e salva no Drive com sucesso!");
+
+//   } catch (error) {
+//     console.error("Erro ao gerar OS:", error);
+//     alert("Ocorreu um erro ao gerar a O.S. Verifique sua conexão e tente novamente.");
+//   } finally {
+//     // Restaura o layout normal devolvendo os estilos originais
+//     Object.assign(element.style, originalStyles);
+
+//     // Restaura os botões
+//     document.getElementById("action-buttons").style.display = "block";
+//     document.getElementById("btn-add-photo").style.display = "flex";
+//     document.getElementById("btn-clear-signature").style.display = "inline-block";
+//     document.querySelectorAll(".btn-remove-photo").forEach(btn => btn.style.display = "block");
+//     modal.style.display = "none";
+//   }
+// }
+
 async function handleSaveOS() {
   const modal = document.getElementById("loading-modal");
   const loadingText = document.getElementById("loading-text");
@@ -116,17 +214,10 @@ async function handleSaveOS() {
 
   const element = document.getElementById("os-container");
 
-  // Salva o estado original dos estilos que vamos manipular
-  const originalStyles = {
-    width: element.style.width,
-    maxWidth: element.style.maxWidth,
-    minWidth: element.style.minWidth,
-    margin: element.style.margin,
-    position: element.style.position,
-    top: element.style.top,
-    left: element.style.left,
-    transform: element.style.transform
-  };
+  // Salva os estilos originais para podermos restaurar depois
+  const originalWidth = element.style.width;
+  const originalMaxWidth = element.style.maxWidth;
+  const originalMargin = element.style.margin;
 
   try {
     const rawName = document.getElementById("cliente-nome").value.trim();
@@ -141,15 +232,13 @@ async function handleSaveOS() {
 
     window.scrollTo(0, 0);
 
-    // TRUQUE DEFINITIVO: Aplica os estilos via JS para isolar o form (Alta Especificidade)
-    element.style.width = '780px';
-    element.style.minWidth = '780px';
-    element.style.maxWidth = '780px';
+    // PREPARAÇÃO EXATA PARA O PDF:
+    // 1. Largura de 790px (Proporção perfeita para folha A4)
+    // 2. maxWidth: 'none' (Impede o celular de encolher ou cortar)
+    // 3. margin: '0' (Empurra pro canto esquerdo, resolvendo o bug do PC esmagado)
+    element.style.width = '790px';
+    element.style.maxWidth = 'none';
     element.style.margin = '0';
-    element.style.position = 'absolute';
-    element.style.top = '0';
-    element.style.left = '0';
-    element.style.transform = 'none';
 
     const opt = {
       margin: 5,
@@ -160,7 +249,11 @@ async function handleSaveOS() {
         scale: 2, 
         useCORS: true,
         scrollY: 0,
-        scrollX: 0
+        scrollX: 0,
+        x: 0, // Força a captura começar do exato canto superior esquerdo
+        y: 0,
+        windowWidth: 790, 
+        width: 790 // Trava a largura da captura
       },
       jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
     };
@@ -195,8 +288,10 @@ async function handleSaveOS() {
     console.error("Erro ao gerar OS:", error);
     alert("Ocorreu um erro ao gerar a O.S. Verifique sua conexão e tente novamente.");
   } finally {
-    // Restaura o layout normal devolvendo os estilos originais
-    Object.assign(element.style, originalStyles);
+    // RESTAURA TUDO AO NORMAL PARA O USUÁRIO
+    element.style.width = originalWidth;
+    element.style.maxWidth = originalMaxWidth;
+    element.style.margin = originalMargin;
 
     // Restaura os botões
     document.getElementById("action-buttons").style.display = "block";
