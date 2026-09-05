@@ -140,7 +140,7 @@ async function handleSaveOS() {
     element.style.margin = '0 auto';
 
     const opt = {
-      margin: 10, // Aumenta a margem de segurança nas bordas do PDF (em mm)
+      margin: 2, // Aumenta a margem de segurança nas bordas do PDF (em mm)
       filename: filename,
       image: { type: 'jpeg', quality: 0.98 },
       pagebreak: { mode: ['css', 'legacy'] },
