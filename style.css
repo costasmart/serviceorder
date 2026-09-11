@@ -194,8 +194,8 @@ input:focus, select:focus, textarea:focus {
 
 .photo-card {
   position: relative;
-  width: 90px;
-  height: 90px;
+  width: 260px;
+  height: 260px;
   border-radius: 8px;
   overflow: hidden;
   border: 1px solid #cbd5e1;
